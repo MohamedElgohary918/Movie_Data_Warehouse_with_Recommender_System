@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Movies] (
-  [movie_id] [int] NOT NULL,
+  [movie_id] [int] IDENTITY,
   [movie_name] [varchar](255) NULL,
   [overview] [text] NULL,
   [duration] [float] NULL,
