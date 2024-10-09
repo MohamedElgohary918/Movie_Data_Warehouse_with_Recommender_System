@@ -1,21 +1,17 @@
-# Done first table 
+## Metadata Transformations
 
+1. **Movie Title Transformation**: 
+   - Extracts movie names by removing the release year from the title.
+   - Extracts the release year from the title and saves it as a separate column.
 
-```
-        directedBy                                           starring  ...                        names  year 
-0    John Lasseter  Tim Allen, Tom Hanks, Don Rickles, Jim Varney,...  ...                    Toy Story  1995 
-1     Joe Johnston  Jonathan Hyde, Bradley Pierce, Robin Williams,...  ...                      Jumanji  1995 
-2    Howard Deutch  Jack Lemmon, Walter Matthau, Ann-Margret , Sop...  ...             Grumpier Old Men  1995 
-3  Forest Whitaker  Angela Bassett, Loretta Devine, Whitney Housto...  ...            Waiting to Exhale  1995 
-4    Charles Shyer  Steve Martin, Martin Short, Diane Keaton, Kimb...  ...  Father of the Bride Part II  1995 
+2. **Extract Starring Actors**: 
+   - Splits the starring actors' names into separate entries for better analysis.
+   
+3. **Extract Director**: 
+   - Saves the director's names into a separate CSV file for further use.
 
-[5 rows x 8 columns]
-Transformed data saved to Raw_Data\Raw_data_transformed\Transformed_metadata.csv
-Starring actors saved to CSV:
-   item_id           starring
-0        1          Tim Allen
-0        1          Tom Hanks
-0        1        Don Rickles
-0        1         Jim Varney
-0        1  John Ratzenberger
-```
+4. **Remove Directors**: 
+   - Removes the director column from the transformed metadata to streamline the dataset.
+
+5. **Remove Starring**: 
+   - Removes the starring column from the transformed metadata to focus on other data points.
