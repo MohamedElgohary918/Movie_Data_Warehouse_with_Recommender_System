@@ -8,7 +8,7 @@ CREATE TABLE TagApplication (
   User_id INT,
   Tag_id INT,
   Score INT,
-  CONSTRAINT FK_Movie FOREIGN KEY (Movie_id) REFERENCES Movies(Movie_id),
-  CONSTRAINT FK_User FOREIGN KEY (User_id) REFERENCES Users(User_id),
+  CONSTRAINT ke_Movie FOREIGN KEY (Movie_id) REFERENCES Movies(Movie_id),
+  CONSTRAINT K_User FOREIGN KEY (User_id) REFERENCES Users(User_id),
   CONSTRAINT FK_Tag FOREIGN KEY (Tag_id) REFERENCES Tags(Tag_id)
 );

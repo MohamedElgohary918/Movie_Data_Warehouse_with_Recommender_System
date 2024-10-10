@@ -6,6 +6,6 @@ CREATE TABLE Directors (
 CREATE TABLE MovieDirector (
   Movie_id INT,
   Director_id INT,
-  CONSTRAINT FK_Movie FOREIGN KEY (Movie_id) REFERENCES Movies(Movie_id),
+  CONSTRAINT K_Movie FOREIGN KEY (Movie_id) REFERENCES Movies(Movie_id),
   CONSTRAINT FK_Director FOREIGN KEY (Director_id) REFERENCES Directors(Director_id)
 );
