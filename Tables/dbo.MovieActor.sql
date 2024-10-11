@@ -1,7 +1,4 @@
-CREATE TABLE Actor (
-  Actor_id INT IDENTITY(1,1) PRIMARY KEY,
-  Actor_name VARCHAR(500)
-);
+;
 
 CREATE TABLE MovieActor (
   Movie_id INT,
