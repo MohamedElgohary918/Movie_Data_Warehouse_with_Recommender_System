@@ -41,7 +41,7 @@
 **Description**: Identify the top 7 most frequently used tags across all movies, ordered by usage_count in descending order to highlight the most popular tags.
 
 
-### Q8: Directors with the highest-rated movies?
+### Q8: Directors with the highest-rated movies
 ![alt text](<Imgs/directors with the highest-rated movies.png>)
 
 **Description**: Retrieve the directors with the highest-rated movies by calculating the average rating of the movies directed by each director.
