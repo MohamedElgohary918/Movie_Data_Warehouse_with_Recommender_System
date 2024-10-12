@@ -1,42 +1,41 @@
 import pandas as pd
+import os
 
-# Load and convert metadata.json
-metadata_df = pd.read_json('Raw_Data\\movie_dataset_public_final\\raw\\metadata.json', lines=True)
-metadata_df.to_csv('Raw_Data\\movie_dataset_public_final\\csv\\metadata.csv', index=False)
-print("Metadata saved to CSV:")
-print(metadata_df.head())
-print()
+def convert_file_to_csv(file_name, data_path, csv_output_path):
+    file_path = os.path.join(data_path, file_name)
 
-# Load and convert ratings.json
-ratings_df = pd.read_json('Raw_Data\\movie_dataset_public_final\\raw\\ratings.json', lines=True)
-ratings_df.to_csv('Raw_Data\\movie_dataset_public_final\\csv\\ratings.csv', index=False)
-print("Ratings saved to CSV:")
-print(ratings_df.head())
-print()
+    file_name, file_extension= os.path.splitext(file_name)
+    file_type = file_extension[1:].lower() 
 
-# Load and convert reviews.json
-reviews_df = pd.read_json('Raw_Data\\movie_dataset_public_final\\raw\\reviews.json', lines=True)
-reviews_df.to_csv('Raw_Data\\movie_dataset_public_final\\csv\\reviews.csv', index=False)
-print("Reviews saved to CSV:")
-print(reviews_df.head())
-print()
+    if file_type == 'json':
+        df = pd.read_json(file_path, lines=True)
+    elif file_type in ['xlsx', 'xls']:
+        if file_type == 'xlsx':
+            df = pd.read_excel(file_path, engine='openpyxl')
+        else:
+            df = pd.read_excel(file_path, engine='xlrd')
+    elif file_type == 'txt':
+        df = pd.read_csv(file_path, sep='\t') 
+    elif file_type == 'csv':
+        df = pd.read_csv(file_path)
+    else:
+        print(f"Unsupported file type: {file_name}")
+        return
 
-# Load and convert survey_answers.json
-survey_answers_df = pd.read_json('Raw_Data\\movie_dataset_public_final\\raw\\survey_answers.json', lines=True)
-survey_answers_df.to_csv('Raw_Data\\movie_dataset_public_final\\csv\\survey_answers.csv', index=False)
-print("Survey Answers saved to CSV:")
-print(survey_answers_df.head())
-print()
+    csv_file = f"{file_name}.csv"  
+    csv_path = os.path.join(csv_output_path, csv_file)
+    df.to_csv(csv_path, index=False)
 
-# Load and convert tag_count.json
-tag_count_df = pd.read_json('Raw_Data\\movie_dataset_public_final\\raw\\tag_count.json', lines=True)
-tag_count_df.to_csv('Raw_Data\\movie_dataset_public_final\\csv\\tag_count.csv', index=False)
-print("Tag Count saved to CSV:")
-print(tag_count_df.head())
-print()
+    print(f"{file_name} has been converted to CSV.")
+    print(df.head())
 
-# Load and convert tags.json
-tags_df = pd.read_json('Raw_Data\\movie_dataset_public_final\\raw\\tags.json', lines=True)
-tags_df = tags_df.to_csv('Raw_Data\\movie_dataset_public_final\\csv\\tags.csv', index=False)
-print(f"wow {tags_df.head()}")
+data_path = 'Raw_Data\\movie_dataset_public_final\\raw'
+csv_output_path = 'Raw_Data\\movie_dataset_public_final\\csv'
+
+convert_file_to_csv('metadata.json', data_path, csv_output_path)
+convert_file_to_csv('ratings.json', data_path, csv_output_path)
+convert_file_to_csv('reviews.json', data_path, csv_output_path)
+convert_file_to_csv('survey_answers.json', data_path, csv_output_path)
+convert_file_to_csv('tag_count.json', data_path, csv_output_path)
+convert_file_to_csv('tags.json', data_path, csv_output_path)
 
