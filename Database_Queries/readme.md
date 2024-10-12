@@ -65,5 +65,5 @@
 ### Q12: Actors who have the highest average ratings across all their movies
 ![alt text](<Imgs/actors with high rating.png>)
 
-**Description**: Finds the average rating of movies for each actor, showing which actors are in movies that people like the most.
+**Description**: Finds the average rating of movies for each actor, showing which actors are in movies that people like the most.....
 
