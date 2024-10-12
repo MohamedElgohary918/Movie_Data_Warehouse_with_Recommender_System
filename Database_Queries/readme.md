@@ -39,3 +39,31 @@
 ![Q7](<Imgs/Pasted image 20241011180337.png>)
 
 **Description**: Identify the top 7 most frequently used tags across all movies, ordered by usage_count in descending order to highlight the most popular tags.
+
+
+### Q8: Directors with the highest-rated movies?
+![alt text](<Imgs/directors with the highest-rated movies.png>)
+
+**Description**: Retrieve the directors with the highest-rated movies by calculating the average rating of the movies directed by each director.
+
+### Q9: Movies without rating 
+![alt text](<Imgs/movies without rating.png>)
+
+**Description**: Retrieves a list of movies that have not received any ratings
+
+### Q10: Actors who have worked with the most directors
+![alt text](<Imgs/actors that worked with the most directors.png>)
+
+**Description**: Retrieves a list of actors who worked with the most directors orderd by the nubers of directors 
+
+
+### Q11: The distribution of ratings for each movie
+![alt text](<Imgs/the distribution of ratings for each movie.png>)
+
+**Description**: shows how many times each rating has been given to each movie. It helps to see how people feel about each film.
+
+### Q12: Actors who have the highest average ratings across all their movies
+![alt text](<Imgs/actors with high rating.png>)
+
+**Description**: Finds the average rating of movies for each actor, showing which actors are in movies that people like the most.
+
