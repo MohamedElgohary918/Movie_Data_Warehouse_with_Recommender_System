@@ -1,1 +1,8 @@
-.Raw_Data/
+Raw_Data/
+.env
+poetry.lock
+__pycache__/
+*.pkl
+*.bin
+mlruns/
+mlartifacts/
