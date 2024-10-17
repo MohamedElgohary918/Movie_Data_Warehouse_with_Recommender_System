@@ -17,7 +17,7 @@ class Movie(Base):
     # Relationships
     actors = relationship("MovieActor", back_populates="movie")
     director = relationship("MovieDirector", back_populates="movie")
-    ratings = relationship("Rating", back_populates="movie")  # Add relationship to ratings
+    ratings = relationship("Rating", back_populates="movie") 
 
 class Actor(Base):
     __tablename__ = "Actors"
@@ -50,7 +50,7 @@ class MovieDirector(Base):
 class Rating(Base):
     __tablename__ = "ratings"
     movie_id = Column(Integer, ForeignKey("Movies.movie_id"), primary_key=True)
-    user_id = Column(Integer, ForeignKey("Client.user_id"))  # References Client
+    user_id = Column(Integer, ForeignKey("Client.user_id")) 
     rating = Column(Integer, nullable=False)
 
     # Relationships
@@ -58,7 +58,7 @@ class Rating(Base):
     user = relationship("Client", back_populates="ratings")
 
 class Client(Base):
-    __tablename__ = "Client"  # Table name must match foreign key reference
+    __tablename__ = "Client"
     user_id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     
@@ -66,7 +66,7 @@ class Client(Base):
     ratings = relationship("Rating", back_populates="user")
 
 # Database setup
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"  # Example using SQLite
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

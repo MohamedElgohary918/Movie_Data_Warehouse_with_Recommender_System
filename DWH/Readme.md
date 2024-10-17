@@ -175,7 +175,7 @@ FROM FactMovieInteractions F
 LEFT join DimMovies D on D.movie_id = F.movie_id
 ORDER BY movie_count DESC;
 ```
-![alt text](Imgs/image.png)
+![alt text](Imgs/image3.png)
 
 ### 3. Total directors by Movie
 ```sql
@@ -184,7 +184,7 @@ FROM FactMovieInteractions F
 LEFT join DimDirectors D on D.movie_id = F.movie_id
 ORDER BY director_count DESC;
 ```
-![alt text](Imgs/image-1.png)
+![alt text](Imgs/image1.png)
 
 
 ### Note on Bridge Tables
