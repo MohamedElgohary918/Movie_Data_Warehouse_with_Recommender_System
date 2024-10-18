@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Database Interaction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f5f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin: 40px 0;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-top: 30px;
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Database Interaction</h1>
+    <div class="container">
+        <h2 class="section-title">Add a Movie</h2>
+        <form id="movieForm">
+            <div class="form-group">
+                <label for="movie_name">Movie Name</label>
+                <input type="text" id="movie_name" name="movie_name" placeholder="Enter movie name" required>
+            </div>
+            <div class="form-group">
+                <label for="release_year">Release Year</label>
+                <input type="number" id="release_year" name="release_year" placeholder="Enter release year" required>
+            </div>
+            <div class="form-group">
+                <label for="imdbId">IMDB ID</label>
+                <input type="text" id="imdbId" name="imdbId" placeholder="Enter IMDB ID" required>
+            </div>
+            <div class="form-group">
+                <label for="actors">Actor Name</label>
+                <input type="text" id="actors" name="actors" placeholder="Comma-separated names of actors">
+            </div>
+            <div class="form-group">
+                <label for="director">Director Name</label>
+                <input type="text" id="director" name="director" placeholder="Enter director's name" required>
+            </div>
+            <button type="submit" class="btn">Add Movie</button>
+        </form>
+
+        <h2 class="section-title">Add a Rating</h2>
+        <form id="ratingForm">
+            <div class="form-group">
+                <label for="movie_id_rating">Movie ID</label>
+                <input type="number" id="movie_id_rating" name="movie_id_rating" placeholder="Enter movie ID" required>
+            </div>
+            <div class="form-group">
+                <label for="user_id">User ID</label>
+                <input type="number" id="user_id" name="user_id" placeholder="Enter your user ID" required>
+            </div>
+            <div class="form-group">
+                <label for="rating_value">Rating (1 to 5)</label>
+                <input type="number" id="rating_value" name="rating_value" min="1" max="5" placeholder="Enter a rating" required>
+            </div>
+            <button type="submit" class="btn">Add Rating</button>
+        </form>
+
+        <div id="response" class="response"></div>
+    </div>
+
+    <script>
+        // JavaScript to handle movie form submission
+        document.getElementById("movieForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const movie_name = document.getElementById("movie_name").value;
+            const release_year = document.getElementById("release_year").value;
+            const imdbId = document.getElementById("imdbId").value;
+            const actors = document.getElementById("actors").value.split(',').map(actor => ({ actor_name: actor.trim() }));
+            const director = { director_name: document.getElementById("director").value };
+
+            const response = await fetch('http://127.0.0.1:8000/add_movie', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    movie_name: movie_name,
+                    release_year: parseInt(release_year),
+                    imdbId: imdbId,
+                    actors: actors,
+                    director: director
+                })
+            });
+
+            const result = await response.json();
+            document.getElementById("response").innerHTML = result.message || "Error adding movie";
+        });
+
+        // JavaScript to handle rating form submission
+        document.getElementById("ratingForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const movie_id = document.getElementById("movie_id_rating").value;
+            const user_id = document.getElementById("user_id").value;
+            const rating = document.getElementById("rating_value").value;
+
+            const response = await fetch('http://127.0.0.1:8000/ratings/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    movie_id: parseInt(movie_id),
+                    user_id: parseInt(user_id),
+                    rating: parseInt(rating)
+                })
+            });
+
+            const result = await response.json();
+            document.getElementById("response").innerHTML = result.message || "Error adding rating";
+        });
+    </script>
+</body>
+</html>

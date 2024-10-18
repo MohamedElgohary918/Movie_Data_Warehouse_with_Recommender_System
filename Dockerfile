@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM python:3.12-slim
 
 # Set the working directory in the container
 WORKDIR /app
@@ -16,7 +16,7 @@ ENV PATH="/root/.local/bin:$PATH"
 COPY pyproject.toml ./
 
 # Install dependencies using Poetry
-RUN poetry install --no-dev --no-interaction --no-ansi
+RUN poetry install --only main --no-interaction --no-ansi
 
 # Copy the current directory contents into the container at /app
 COPY . .

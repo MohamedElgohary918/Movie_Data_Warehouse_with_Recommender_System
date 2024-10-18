@@ -6,5 +6,6 @@ venv/
 build/
 dist/
 *.egg-info
+poetry.lock
 mlruns/
 mlartifacts/
