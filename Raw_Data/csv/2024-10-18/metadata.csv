@@ -1,0 +1,6 @@
+title,directedBy,starring,dateAdded,avgRating,imdbId,item_id
+Inception,Christopher Nolan,"['Leonardo DiCaprio', 'Joseph Gordon-Levitt']",2010-07-16,8.8,tt1375666,1
+The Dark Knight,Christopher Nolan,"['Christian Bale', 'Heath Ledger']",2008-07-18,9.0,tt0468569,2
+Forrest Gump,Robert Zemeckis,"['Tom Hanks', 'Robin Wright']",1994-07-06,8.8,tt0109830,3
+The Matrix,"Lana Wachowski, Lilly Wachowski","['Keanu Reeves', 'Carrie-Anne Moss']",1999-03-31,8.7,tt0133093,4
+Interstellar,Christopher Nolan,"['Matthew McConaughey', 'Anne Hathaway']",2014-11-07,8.6,tt0816692,5
