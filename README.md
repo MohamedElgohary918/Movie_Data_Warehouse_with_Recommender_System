@@ -12,7 +12,6 @@ Movies-DEPI-Grad-Project
 - [Deployment](#deployment)
   - [Azure Deployment](#option-1-azure-deployment)
   - [Docker Deployment](#option-2-docker-deployment)
-- [Techniques and Potential Enhancements](#techniques-and-potential-enhancements)
 - [Future Work](#future-work)
 
 ## Overview
@@ -104,70 +103,6 @@ docker build -t movie-recommender-app .
 docker run -p 8501:8501 movie-recommender-app
 ```
 
-## Techniques and Potential Enhancements
-
-This project currently uses a **content-based filtering** technique with **Faiss** for similarity search and **SentenceTransformers** for embedding movie metadata into a numerical format. There are several other recommendation techniques that could be explored, each with its own advantages and drawbacks:
-
-### 1. Collaborative Filtering
-Collaborative filtering recommends items based on user behavior and preferences. It uses either user-item interaction matrices or item-based collaborative filtering.
-
-- **Advantages**:
-  - Works well when there is rich user interaction data.
-  - No need for feature engineering based on the item’s metadata.
-
-- **Drawbacks**:
-  - **Cold Start Problem**: It struggles with recommending items to new users or recommending new items since no interaction history exists.
-  - **Sparsity**: In large systems, the interaction matrix can be very sparse, leading to poor recommendations.
-  - Does not consider the content of items (e.g., movie metadata).
-
-### 2. Matrix Factorization (SVD or ALS)
-This is a popular technique for collaborative filtering that decomposes the user-item interaction matrix into low-dimensional latent factors. **SVD (Singular Value Decomposition)** and **ALS (Alternating Least Squares)** are common approaches.
-
-- **Advantages**:
-  - Efficient with large datasets.
-  - Captures hidden structures between users and items.
-
-- **Drawbacks**:
-  - Requires regular retraining as new interactions are introduced.
-  - Struggles with cold-start problems similar to collaborative filtering.
-
-### 3. Hybrid Systems
-Combines collaborative filtering and content-based filtering to get the best of both worlds.
-
-- **Advantages**:
-  - Can alleviate the cold-start problem by combining user preferences with metadata.
-  - More flexible as it utilizes both behavioral and content-based data.
-
-- **Drawbacks**:
-  - Complex to implement and requires more computation.
-  - Requires proper balancing between the two approaches.
-
-### 4. Deep Learning-Based Recommendation Systems
-Using techniques like **autoencoders**, **neural collaborative filtering (NCF)**, or **convolutional neural networks (CNNs)**, this approach leverages deep neural networks to generate recommendations.
-
-- **Advantages**:
-  - Can model complex user-item interactions and nonlinear relationships.
-  - Highly flexible in terms of integrating side information (e.g., user demographics or movie metadata).
-
-- **Drawbacks**:
-  - Requires extensive computational resources and tuning.
-  - Requires large datasets to perform well.
-  - Hard to interpret the models and recommendations.
-
-### 5. Knowledge Graph-Based Recommendations
-Utilizes a **knowledge graph** where relationships between users, items, genres, and actors are explicitly modeled to make recommendations based on the graph structure.
-
-- **Advantages**:
-  - Provides more explainable recommendations.
-  - Can incorporate many diverse types of information (e.g., genre, actors, directors).
-
-- **Drawbacks**:
-  - Complex and requires significant setup.
-  - Performance can degrade if the graph becomes too large or dense.
-
->### Conclusion
-
->>The **Movie Recommendation System** implemented in this project is a content-based system leveraging **SentenceTransformers** and **Faiss** for fast similarity searches. While this approach works well for this application, future enhancements could include experimenting with **collaborative filtering**, **hybrid systems**, and **deep learning-based techniques** to improve recommendation accuracy and user satisfaction.
 
 ## Future Work
 - **Adding User Interaction:** Implement user login and track preferences for collaborative filtering.
