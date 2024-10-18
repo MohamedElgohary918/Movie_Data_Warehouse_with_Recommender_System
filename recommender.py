@@ -12,7 +12,7 @@ class MovieRecommender:
         self.model = SentenceTransformer('all-MiniLM-L6-v2')  # Load pre-trained sentence transformer
         self.movie_embeddings = None
         self.index = None
-        self.embeddings_file = "movie_embeddings.pkl"  # Filename to save embeddings
+        self.embeddings_file = "models/movie_embeddings.pkl"  # Filename to save embeddings
 
     def preprocess_data(self):
         # Combine relevant features for content-based filtering
@@ -39,7 +39,7 @@ class MovieRecommender:
         self.index.add(np.array(self.movie_embeddings).astype(np.float32))  # Add data to the index
 
         # Save the Faiss index to a file
-        faiss_index_file = "faiss_index.bin"
+        faiss_index_file = "models/faiss_index.bin"
         faiss.write_index(self.index, faiss_index_file)
 
     def load_model(self):
@@ -48,7 +48,7 @@ class MovieRecommender:
         self.movie_embeddings = joblib.load(self.embeddings_file)
 
         # Create the Faiss index
-        self.index = faiss.read_index("faiss_index.bin")
+        self.index = faiss.read_index("models/faiss_index.bin")
 
     def get_recommendations(self, title, top_n=5):
         """Get movie recommendations based on the trained model."""

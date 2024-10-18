@@ -8,10 +8,10 @@ recommender = MovieRecommender('metadata_with_imdb_metadata.csv')
 st.title("Movie Recommendation System")
 
 # Button to train the model
-if st.button("Train Model"):
-    with st.spinner("Training model..."):
-        recommender.train_model()  # Train the model
-    st.success("Model trained successfully!")
+# if st.button("Train Model"):
+#     with st.spinner("Training model..."):
+#         recommender.train_model()  # Train the model
+#     st.success("Model trained successfully!")
 
 # Movie selection by user
 movie_choice = st.selectbox("Choose a movie", recommender.movies['title'])
