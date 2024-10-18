@@ -31,9 +31,12 @@ This enables tracking and monitoring of model performance over time.
 
 1. Start the FastAPI server:
    ```bash
+   cd Recommender_system
+   ```
+   ```bash
    uvicorn main:app --reload
    ```
-2. Start the MLFlow ui:
+2. Start the MLFlow UI:
    ```bash
    mlflow ui
    ```
