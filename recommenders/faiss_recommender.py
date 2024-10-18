@@ -3,9 +3,7 @@ import faiss
 import joblib
 import mlflow
 import streamlit as st
-import pyodbc  # To connect to SQL Server
 from sqlalchemy import create_engine, MetaData, Table
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 import pandas as pd
 import numpy as np
@@ -22,12 +20,12 @@ class FaissRecommender(MovieRecommenderBase):
         self.index = None
         self.movie_embeddings = None
         self.csv_file = BASE_CONFIG['data_path']
-        self.sql_connection = BASE_CONFIG['sql_server_connection']
+        self.sql_connection = BASE_CONFIG['sqlalchemy_connection_string']
         self.engine = create_engine(self.sql_connection)
         self.metadata = MetaData()
         self.movies_table = Table('Movies', self.metadata, autoload_with=self.engine)
-        self.starring_table = Table('Starring', self.metadata, autoload_with=self.engine)
-        self.directors_table = Table('Directors', self.metadata, autoload_with=self.engine)
+        self.starring_table = Table('actors', self.metadata, autoload_with=self.engine)
+        self.directors_table = Table('director', self.metadata, autoload_with=self.engine)
 
 
     def load_data_from_sql(self):
@@ -44,10 +42,10 @@ class FaissRecommender(MovieRecommenderBase):
                     GROUP_CONCAT(DISTINCT d.name) AS directedBy, 
                     m.genres, m.total_rating, m.votes, m.cover_url_better
             FROM Movies m
-            LEFT JOIN Starring_Movies sm ON m.movie_id = sm.movie_id
+            LEFT JOIN MovieActor sm ON m.movie_id = sm.movie_id
             LEFT JOIN actors s ON sm.starring_id = s.starring_id
-            LEFT JOIN Directors_Movies dm ON m.movie_id = dm.movie_id
-            LEFT JOIN Director d ON dm.director_id = d.director_id
+            LEFT JOIN MovieDirector dm ON m.movie_id = dm.movie_id
+            LEFT JOIN director d ON dm.director_id = d.director_id
             GROUP BY m.title, m.genres, m.total_rating, m.votes, m.cover_url_better;
             """
 
@@ -55,18 +53,18 @@ class FaissRecommender(MovieRecommenderBase):
             result = pd.read_sql(query, self.engine)
             
             # Save the result to a CSV file
-            result.to_csv(self.csv_file_path, index=False)
+            result.to_csv(self.csv_file, index=False)
             print("Movie data saved to CSV successfully.")
         except SQLAlchemyError as e:
             print(f"An error occurred while fetching movie data: {e}")
     
-    def load_data(self):
+    def load_movies(self):
         """Load movie data from CSV or SQL."""
         # Check if the CSV file exists
         if not os.path.exists(self.csv_file):
             # If CSV doesn't exist, load from SQL and save
             self.load_data_from_sql()
-        
+        print("Loading movie data from CSV...")
         # Load the CSV data
         self.movies = pd.read_csv(self.csv_file)
 

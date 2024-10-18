@@ -68,11 +68,12 @@ recommender = RecommenderFactory.get_recommender(BASE_CONFIG['recommender_type']
 st.title("Movie Recommendation System")
 
 # Train model
-if st.button("Train Model"):
-    with st.spinner("Training model..."):
-        recommender.train_model()
-    st.success("Model trained successfully!")
+# if st.button("Train Model"):
+#     with st.spinner("Training model..."):
+#         recommender.train_model()
+#     st.success("Model trained successfully!")
 
+recommender.load_movies()
 # Get movie recommendations
 movie_choice = st.selectbox("Choose a movie", recommender.movies['title'])
 # Button to get recommendations
