@@ -1,0 +1,47 @@
+[
+    {
+        "title": "Inception",
+        "directedBy": "Christopher Nolan",
+        "starring": ["Leonardo DiCaprio", "Joseph Gordon-Levitt"],
+        "dateAdded": "2010-07-16",
+        "avgRating": 8.8,
+        "imdbId": "tt1375666",
+        "item_id": 1
+    },
+    {
+        "title": "The Dark Knight",
+        "directedBy": "Christopher Nolan",
+        "starring": ["Christian Bale", "Heath Ledger"],
+        "dateAdded": "2008-07-18",
+        "avgRating": 9.0,
+        "imdbId": "tt0468569",
+        "item_id": 2
+    },
+    {
+        "title": "Forrest Gump",
+        "directedBy": "Robert Zemeckis",
+        "starring": ["Tom Hanks", "Robin Wright"],
+        "dateAdded": "1994-07-06",
+        "avgRating": 8.8,
+        "imdbId": "tt0109830",
+        "item_id": 3
+    },
+    {
+        "title": "The Matrix",
+        "directedBy": "Lana Wachowski, Lilly Wachowski",
+        "starring": ["Keanu Reeves", "Carrie-Anne Moss"],
+        "dateAdded": "1999-03-31",
+        "avgRating": 8.7,
+        "imdbId": "tt0133093",
+        "item_id": 4
+    },
+    {
+        "title": "Interstellar",
+        "directedBy": "Christopher Nolan",
+        "starring": ["Matthew McConaughey", "Anne Hathaway"],
+        "dateAdded": "2014-11-07",
+        "avgRating": 8.6,
+        "imdbId": "tt0816692",
+        "item_id": 5
+    }
+]

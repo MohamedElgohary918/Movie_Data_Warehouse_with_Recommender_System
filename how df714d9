@@ -1,0 +1,47 @@
+[33m2dfbd67[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Merge branch 'main' of https://github.com/codsalah/Movies-DEPI-Grad-Project
+[33mdf714d9[m remove General readme content
+[33m2d7c529[m Merge branch 'main' of https://github.com/codsalah/Movies-DEPI-Grad-Project
+[33md556edb[m MLflow integration and updated readme
+[33mc747364[m update readme
+[33m3ad5f53[m add docker file and update the
+[33mbabf19c[m update readme file and update the models location
+[33m0a342e6[m minor updates + requirements txt
+[33ma5cb344[m Merge remote-tracking branch 'origin/API'
+[33m4ba94de[m[33m ([m[1;31morigin/API[m[33m)[m API added
+[33m7e1974e[m update readme
+[33m128cbcb[m Add mpvie recmmendation model API and updated readme
+[33m6686ce4[m Merge remote-tracking branch 'origin/feature/recommender'
+[33m83709bf[m "updated project structure"
+[33m1ee5e6f[m init recommendation
+[33ma327ac4[m init recommendation
+[33m77b9ce3[m Load data into dimension tables using SSIS and update README
+[33mfa4d9fd[m Create Data Warehouse Schema and Populate Initial Data
+[33mf177ea5[m[33m ([m[1;32mscripts[m[33m)[m Update project folder Sturcture
+[33mf8e2eb8[m[33m ([m[1;31morigin/scripts[m[33m)[m Updated the scripts input and outputs by each day
+[33mbb366ae[m[33m ([m[1;31morigin/shahd[m[33m)[m commit
+[33meb489fd[m Add function to convert varios file format to CSV
+[33m1c82b72[m Add database queries
+[33ma7f1a61[m Add database queries
+[33mf6181b0[m update table actors
+[33m93d4ef1[m Added the Database Readme with the Queries and GrandOld Schema
+[33m5376901[m Added the Database queries and The GrandOld Schema
+[33mf05e6df[m update movies table
+[33m941da42[m 11/10/24
+[33m0ec4aba[m Fixed queries
+[33mf232df1[m create tables & readme
+[33mb67594e[m create tables and updated readme
+[33m634d60d[m readme updated
+[33mbfcbdf6[m scripts readme updated
+[33ma2f2981[m normalization transformations scripts updated
+[33m98a9154[m Staged additional changes.
+[33m5ab3757[m Resolved merge conflict in Tables/dbo.Movies.sql
+[33me7ccf6a[m ---
+[33mb075bb9[m added python scripts to normalize the data
+[33mb1e09ee[m directorBy normalize transformation
+[33m30466ee[m new table movies
+[33md45c7e2[m delete table movies
+[33m7fef314[m updated readmes and data transformation
+[33m5d3ab81[m preprocessing scripts uploaded
+[33m7c1441d[m make the Id incremntal of the movie id
+[33mb68de55[m first db commot with Table Movies
+[33m068ac17[m Initial commit

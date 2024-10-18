@@ -1,0 +1,42 @@
+[
+  {
+      "item_id": 1,
+      "user_id": 101,
+      "rating": 4.5
+  },
+  {
+      "item_id": 1,
+      "user_id": 102,
+      "rating": 5.0
+  },
+  {
+      "item_id": 2,
+      "user_id": 103,
+      "rating": 4.0
+  },
+  {
+      "item_id": 3,
+      "user_id": 104,
+      "rating": 4.5
+  },
+  {
+      "item_id": 4,
+      "user_id": 105,
+      "rating": 3.5
+  },
+  {
+      "item_id": 5,
+      "user_id": 106,
+      "rating": 5.0
+  },
+  {
+      "item_id": 2,
+      "user_id": 107,
+      "rating": 4.0
+  },
+  {
+      "item_id": 3,
+      "user_id": 108,
+      "rating": 2.5
+  }
+]
