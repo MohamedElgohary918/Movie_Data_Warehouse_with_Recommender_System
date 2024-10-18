@@ -5,7 +5,7 @@ load_dotenv()
 
 # Base configuration for all recommenders
 BASE_CONFIG = {
-    'data_path': os.getenv('MOVIE_DATA_PATH', 'metadata_with_imdb_metadata.csv'),
+    'data_path': os.getenv('MOVIE_DATA_PATH', "data/metadata_with_imdb_metadata.csv"),
     'embedding_model': os.getenv('EMBEDDING_MODEL', 'all-MiniLM-L6-v2'),
     'model_path': os.getenv('MODEL_PATH', 'models/'),
     'faiss_index_file': os.getenv('FAISS_INDEX_FILE', 'faiss_index.bin'),

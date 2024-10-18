@@ -1,0 +1,10 @@
+__pycache__
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+*.egg-info
+mlruns/
+mlartifacts/
