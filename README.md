@@ -6,6 +6,7 @@ This project covers the complete data life cycle from extraction to the deployme
 - [End-to-End Movie Data Processing and Recommender System](#end-to-end-movie-data-processing-and-recommender-system)
     - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
+  - [Installation](#installation)
   - [Data Life Cycle](#data-life-cycle)
   - [Data Sources](#data-sources)
   - [Data Transformation](#data-transformation)
@@ -19,6 +20,29 @@ This project covers the complete data life cycle from extraction to the deployme
 <div style="text-align: center;">
     <img src="page.png" alt="Page">
 </div>
+
+## Installation
+1. Clone the Repository:
+```bash
+git clone https://github.com/your-repo/movie-recommender.git
+cd movie-recommender
+```
+2. Install Dependencies: This project uses Poetry for dependency management. Install it if you don’t have it already:
+```sh
+curl -sSL https://install.python-poetry.org | python3 -
+poetry install
+```
+3. Set Up Environment Variables: Create a .env file in the root directory and add the following variables:
+```makefile
+MOVIE_DATA_PATH=metadata_with_imdb_metadata.csv
+EMBEDDING_MODEL=all-MiniLM-L6-v2
+MODEL_PATH=models/
+FAISS_INDEX_FILE=faiss_index.bin
+EMBEDDINGS_FILE=movie_embeddings.pkl
+MLFLOW_TRACKING_URI=http://localhost:5000
+MLFLOW_EXPERIMENT_NAME=movie_recommender
+MLFLOW_RUN_NAME=faiss_recommender
+```
 
 ## Data Life Cycle
 
@@ -80,6 +104,7 @@ The following technologies were used to build this project:
 - Poetry for dependency management
 - SQLAlchemy for database interaction with SQL Server
 - FastAPI
+- Bash
 - Sentence Transformers for generating embeddings
 - Faiss for similarity search
 - MLflow for model tracking and experiment logging
@@ -90,4 +115,5 @@ The following technologies were used to build this project:
 - [Morsi Mohsen](https://github.com/morsimohsen)
 - [Salah Mohamed](https://github.com/codsalah)
 - [Shahd Hamdi](https://github.com/shahdhamdi)
-- [Mohamed Elgohary918](https://github.com/MohamedElgohary918)
+- [Mohamed Elgohary](https://github.com/MohamedElgohary918)
+- [Alyaa Mahmoud](https://github.com/ALYAA-MAHMOOD)
