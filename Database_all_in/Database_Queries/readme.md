@@ -1,6 +1,6 @@
 
 ## Grand Now Schema
-![alt text](Imgs/ERD.png)
+![alt text](Imgs/ERD2.png)
 
 ## Queries
 
