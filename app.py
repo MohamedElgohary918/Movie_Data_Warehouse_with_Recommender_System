@@ -1,22 +1,28 @@
 import streamlit as st
-from recommender import MovieRecommender
+from recommenders.model_interface import RecommenderFactory
+from config.base_config import BASE_CONFIG
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import mlflow
 
-# Initialize the MovieRecommender
-recommender = MovieRecommender('metadata_with_imdb_metadata.csv')
+
+app = FastAPI()
+
+# Initialize Recommender
+recommender = RecommenderFactory.get_recommender(BASE_CONFIG['recommender_type'], BASE_CONFIG)
 
 # Streamlit app title
 st.title("Movie Recommendation System")
 
-# Button to train the model
+# Train model
 # if st.button("Train Model"):
 #     with st.spinner("Training model..."):
-#         recommender.train_model()  # Train the model
+#         recommender.train_model()
 #     st.success("Model trained successfully!")
 
-# Movie selection by user
+recommender.load_movies()
+# Get movie recommendations
 movie_choice = st.selectbox("Choose a movie", recommender.movies['title'])
-
-
 # Button to get recommendations
 if st.button("Get Recommendations"):
     # Show recommendations when a movie is selected
@@ -42,16 +48,38 @@ if st.button("Get Recommendations"):
 
 
 
-# # Button to get recommendations
-# if st.button("Get Recommendations"):
-#     # Show recommendations when a movie is selected
-#     if movie_choice:
-#         recommendations = recommender.get_recommendations(movie_choice, top_n=10)
-#         st.write("Movies similar to:", movie_choice)
-#         # st.dataframe(recommendations)
 
-#         # Optionally display movie posters (if available in your dataset)
-#         for _, movie in recommendations.iterrows():
-#             st.image(movie['cover_url_better'], width=150, caption=movie['title'])
-#     else:
-#         st.warning("Please select a movie first!")
+
+
+# API endpoint to get recommendations =================================================
+class MovieRequest(BaseModel):
+    title: str
+    top_n: int = 5
+
+@app.post("/movies/recommendations/") 
+def get_recommendations(request: MovieRequest):
+    with mlflow.start_run(nested=True):
+        
+        mlflow.log_param("requested_title", request.title)
+        mlflow.log_param("requested_top_n", request.top_n)
+        
+        recommendations = recommender.get_recommendations(request.title, request.top_n)
+
+        if recommendations is None:
+            raise HTTPException(status_code=404, detail="Movie not found")
+
+        recommendations_output = recommendations[['title', 'genres', 'directedBy', 'cover_url_better']].to_dict(orient='records')
+        
+        mlflow.log_metric("number_of_recommendations", len(recommendations_output))
+        
+        return {
+            "movie": request.title,
+            "recommendations": recommendations_output
+        }
+
+
+# create api of train model
+@app.post("/train_model/")
+def train_model():
+    recommender.train_model()
+    # st.success("Model trained successfully!")
