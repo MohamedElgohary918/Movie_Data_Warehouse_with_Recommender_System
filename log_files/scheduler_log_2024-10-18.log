@@ -1,0 +1,3 @@
+Cron job added to run automate_transformation.sh daily at 2 AM.
+Cron job already exists for automate_transformation.sh
+
