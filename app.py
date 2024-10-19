@@ -58,22 +58,24 @@ class MovieRequest(BaseModel):
 
 @app.post("/movies/recommendations/") 
 def get_recommendations(request: MovieRequest):
-    mlflow.log_param("requested_title", request.title)
-    mlflow.log_param("requested_top_n", request.top_n)
-    
-    recommendations = recommender.get_recommendations(request.title, request.top_n)
+    with mlflow.start_run(nested=True):
+        
+        mlflow.log_param("requested_title", request.title)
+        mlflow.log_param("requested_top_n", request.top_n)
+        
+        recommendations = recommender.get_recommendations(request.title, request.top_n)
 
-    if recommendations is None:
-        raise HTTPException(status_code=404, detail="Movie not found")
+        if recommendations is None:
+            raise HTTPException(status_code=404, detail="Movie not found")
 
-    recommendations_output = recommendations[['title', 'genres', 'directedBy', 'cover_url_better']].to_dict(orient='records')
-    
-    mlflow.log_metric("number_of_recommendations", len(recommendations_output))
-    
-    return {
-        "movie": request.title,
-        "recommendations": recommendations_output
-    }
+        recommendations_output = recommendations[['title', 'genres', 'directedBy', 'cover_url_better']].to_dict(orient='records')
+        
+        mlflow.log_metric("number_of_recommendations", len(recommendations_output))
+        
+        return {
+            "movie": request.title,
+            "recommendations": recommendations_output
+        }
 
 
 # create api of train model
