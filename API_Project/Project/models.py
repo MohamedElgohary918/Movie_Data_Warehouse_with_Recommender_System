@@ -42,8 +42,9 @@ try:
     print("Data successfully inserted into SQL Server.")
 except Exception as e:
     print(f"Error: {e}")
+    print("Could NOt inserted into SQL Server.")
 
-  
+''' 
 # Truncate (delete all data) in the CSV files by saving empty DataFrames with column names
 movies_df.iloc[0:0].to_csv('Project/movies.csv', index=False)
 movie_actors_df.iloc[0:0].to_csv('Project/movie_actors.csv', index=False)
@@ -51,3 +52,4 @@ movie_director_df.iloc[0:0].to_csv('Project/movie_director.csv', index=False)
 ratings_df.iloc[0:0].to_csv('Project/ratings.csv', index=False)
 
 print("CSV files truncated, keeping only the column names.")
+'''

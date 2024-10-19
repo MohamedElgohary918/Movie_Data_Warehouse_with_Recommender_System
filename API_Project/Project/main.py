@@ -69,12 +69,14 @@ def get_next_movie_id():
             reader = csv.reader(file)
             rows = list(reader)
             if len(rows) > 1:  # Ensure there is at least one movie
-                return random.randint(239314,10000000)  # Generate a random movie_id
+                return random.randint(250000,10000000)  # Generate a random movie_id
             else:
-                return 1  # If file is empty, start from 1
+                return 240000+random.randint(1,100000) # If file is empty, start from 1
     except FileNotFoundError:
-        return 1  # Start from 1 if file doesn't exist
+        return 239314+random.randint(1,100000)  # Start from 1 if file doesn't exist
 
+
+    
 # Function to append movie data to CSV files
 def write_movie_to_csv(movie_data: Movie):
     movie_file_path = 'movies.csv'
