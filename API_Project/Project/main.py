@@ -1,116 +1,132 @@
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import Movie, Actor, Director, MovieActor, MovieDirector, Rating
-from crud import get_movie_by_name, get_actor_by_name, get_director_by_name
-from schemas import MovieCreate, Actor as ActorSchema, Director as DirectorSchema, Rating as RatingSchema
+import csv
+import random
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Dependency to get DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
-# Endpoint to add a movie along with actors and directors
-@app.post("/add_movie")
-def add_movie(movie: MovieCreate, db: Session = Depends(get_db)):
-    # Check if the movie already exists
-    db_movie = get_movie_by_name(db, movie.movie_name)
-    if db_movie:
-        raise HTTPException(status_code=400, detail="Movie already exists")
+# Define the Rating model (Request Body)
+class Rating(BaseModel):
+    movie_id: int
+    user_id: int
+    rating: float
 
-    # Add new movie
-    new_movie = Movie(
-        movie_name=movie.movie_name,
-        release_year=movie.release_year,
-        imdbId=movie.imdbId
-    )
-    db.add(new_movie)
-    db.commit()
-    db.refresh(new_movie)
-
-    # Check and add actors
-    for actor in movie.actors:
-        db_actor = get_actor_by_name(db, actor.actor_name)
-        if not db_actor:
-            new_actor = Actor(actor_name=actor.actor_name)
-            db.add(new_actor)
-            db.commit()
-            db.refresh(new_actor)
-            db_actor = new_actor
-
-        # Add the relationship to MovieActor
-        new_movie_actor = MovieActor(movie_id=new_movie.movie_id, actor_id=db_actor.actor_id)
-        db.add(new_movie_actor)
-
-    # Check and add director
-    db_director = get_director_by_name(db, movie.director.director_name)
-    if not db_director:
-        new_director = Director(director_name=movie.director.director_name)
-        db.add(new_director)
-        db.commit()
-        db.refresh(new_director)
-        db_director = new_director
-
-    # Add the relationship to MovieDirector
-    new_movie_director = MovieDirector(movie_id=new_movie.movie_id, director_id=db_director.director_id)
-    db.add(new_movie_director)
-
-    db.commit()
-
-    return {"message": "Movie added successfully"}
-
-# Endpoint to add a rating for a movie
-@app.post("/ratings/")
-def add_rating(rating: RatingSchema, db: Session = Depends(get_db)):
-    # Check if the movie exists
-    db_movie = db.query(Movie).filter(Movie.movie_id == rating.movie_id).first()
-    if not db_movie:
-        raise HTTPException(status_code=404, detail="Movie not found")
-
-    # Add the rating
-    new_rating = Rating(
-        movie_id=rating.movie_id,
-        user_id=rating.user_id,
-        rating=rating.rating
-    )
-    db.add(new_rating)
-    db.commit()
-    db.refresh(new_rating)
-
-    return {"message": "Rating added successfully"}
-
-# Endpoint to get ratings for a specific movie
-@app.get("/ratings/{movie_id}")
-def get_ratings(movie_id: int, db: Session = Depends(get_db)):
-    ratings = db.query(Rating).filter(Rating.movie_id == movie_id).all()
-    if not ratings:
-        raise HTTPException(status_code=404, detail="No ratings found for this movie")
+# Function to append rating to CSV file
+def write_rating_to_csv(rating_data: Rating):
+    file_path = 'ratings.csv'
     
-    return ratings
+    # Open the file in append mode
+    with open(file_path, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        
+        # Check if file is empty (no header) to write the header
+        file_empty = file.tell() == 0
+        if file_empty:
+            writer.writerow(['movie_id', 'user_id', 'rating'])  # Write header if file is empty
+        
+        # Write the rating data
+        writer.writerow([rating_data.movie_id, rating_data.user_id, rating_data.rating])
 
-# CRUD functions to get movie, actor, and director by name
-@app.get("/movies/{movie_name}")
-def get_movie_by_name_endpoint(movie_name: str, db: Session = Depends(get_db)):
-    db_movie = get_movie_by_name(db, movie_name)
-    if db_movie is None:
-        raise HTTPException(status_code=404, detail="Movie not found")
-    return db_movie
+@app.post("/add-rating/")
+async def add_rating(rating: Rating):
+    # Validation: Ensure rating is between 0 and 5
+    if rating.rating < 0 or rating.rating > 5:
+        raise HTTPException(status_code=400, detail="Rating must be between 0 and 5")
+    
+    # Store rating data in the CSV
+    write_rating_to_csv(rating)
+    return {"message": "Rating added successfully!"}
 
-@app.get("/actors/{actor_name}")
-def get_actor_by_name_endpoint(actor_name: str, db: Session = Depends(get_db)):
-    db_actor = get_actor_by_name(db, actor_name)
-    if db_actor is None:
-        raise HTTPException(status_code=404, detail="Actor not found")
-    return db_actor
+# Define the Movie model (Request Body)
+class Movie(BaseModel):
+    imdbId: str
+    movie_name: str
+    release_year: int
+    actor_ids: list[int]
+    director_id: int
+'''
+# Function to get the next available movie_id
+def get_next_movie_id():
+    try:
+        with open('movies.csv', mode='r', newline='') as file:
+            reader = csv.reader(file)
+            rows = list(reader)
+            return len(rows)  # assuming movie_id is just the row number (not counting header)
+    except FileNotFoundError:
+        return 1  # Start from 1 if file doesn't exist
+'''
+def get_next_movie_id():
+    try:
+        with open('movies.csv', mode='r', newline='') as file:
+            reader = csv.reader(file)
+            rows = list(reader)
+            if len(rows) > 1:  # Ensure there is at least one movie
+                return random.randint(239314,10000000)  # Generate a random movie_id
+            else:
+                return 1  # If file is empty, start from 1
+    except FileNotFoundError:
+        return 1  # Start from 1 if file doesn't exist
 
-@app.get("/directors/{director_name}")
-def get_director_by_name_endpoint(director_name: str, db: Session = Depends(get_db)):
-    db_director = get_director_by_name(db, director_name)
-    if db_director is None:
-        raise HTTPException(status_code=404, detail="Director not found")
-    return db_director
+# Function to append movie data to CSV files
+def write_movie_to_csv(movie_data: Movie):
+    movie_file_path = 'movies.csv'
+    actors_file_path = 'movie_actors.csv'
+    director_file_path = 'movie_director.csv'
+
+    # Get next available movie_id
+    movie_id = get_next_movie_id()
+
+    # Write to movies.csv
+    with open(movie_file_path, mode='a', newline='') as movie_file:
+        movie_writer = csv.writer(movie_file)
+
+        # Check if file is empty (no header) to write the header
+        file_empty = movie_file.tell() == 0
+        if file_empty:
+            movie_writer.writerow(['imdbId', 'movie_id', 'movie_name', 'release_year'])  # Write header if file is empty
+        
+        # Write the movie data
+        movie_writer.writerow([movie_data.imdbId, movie_id, movie_data.movie_name, movie_data.release_year])
+
+    # Write to movie_actors.csv (for multiple actors)
+    with open(actors_file_path, mode='a', newline='') as actors_file:
+        actors_writer = csv.writer(actors_file)
+
+        # Check if file is empty (no header) to write the header
+        file_empty = actors_file.tell() == 0
+        if file_empty:
+            actors_writer.writerow(['movie_id', 'actor_id'])  # Write header if file is empty
+        
+        # Write the movie-actor relationships
+        for actor_id in movie_data.actor_ids:
+            actors_writer.writerow([movie_id, actor_id])
+
+    # Write to movie_director.csv (for movie-director relationships)
+    with open(director_file_path, mode='a', newline='') as director_file:
+        director_writer = csv.writer(director_file)
+
+        # Check if file is empty (no header) to write the header
+        file_empty = director_file.tell() == 0
+        if file_empty:
+            director_writer.writerow(['movie_id', 'director_id'])  # Write header if file is empty
+        
+        # Write the movie-director relationship
+        director_writer.writerow([movie_id, movie_data.director_id])
+
+@app.post("/add-movie/")
+async def add_movie(movie: Movie):
+    # Validation: Ensure all fields are filled
+    if not movie.imdbId or not movie.movie_name or not movie.release_year or not movie.director_id or not movie.actor_ids:
+        raise HTTPException(status_code=400, detail="All fields are required for the movie")
+
+    # Store movie and actors data in the CSV files
+    write_movie_to_csv(movie)
+    return {"message": "Movie added successfully!"}
