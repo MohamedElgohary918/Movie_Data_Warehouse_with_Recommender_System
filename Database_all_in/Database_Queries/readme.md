@@ -1,6 +1,6 @@
 
-## Grand old Schema
-![alt text](Imgs/grand_old_schema.jpg)
+## Grand Now Schema
+![alt text](Imgs/ERD.png)
 
 ## Queries
 
