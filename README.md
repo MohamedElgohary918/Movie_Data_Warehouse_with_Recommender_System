@@ -113,7 +113,7 @@ The following technologies were used to build this project:
 ## Contributers
 
 - [Morsi Mohsen](https://github.com/morsimohsen)
-- [Salah Mohamed](https://github.com/codsalah)
+- [Salah Mohamed](https:gt//github.com/codsalah)
 - [Shahd Hamdi](https://github.com/shahdhamdi)
 - [Mohamed Elgohary](https://github.com/MohamedElgohary918)
 - [Alyaa Mahmoud](https://github.com/ALYAA-MAHMOOD)
