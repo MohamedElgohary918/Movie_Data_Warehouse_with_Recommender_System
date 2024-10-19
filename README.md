@@ -48,7 +48,7 @@ MLFLOW_RUN_NAME=faiss_recommender
 
 This project covers the complete data life cycle from extraction to the deployment of a recommender system. It includes data extraction, transformation, loading into a database, integration into a data warehouse, and ultimately using the data for recommendations.
 
-
+![alt text](image.png)
 ## Data Sources
 
 The data is sourced from various formats including:
