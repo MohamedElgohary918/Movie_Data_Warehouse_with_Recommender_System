@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie API Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="number"], input[type="submit"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .choices__inner {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+    <!-- Include Choices.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+</head>
+<body>
+
+    <h1>Movie and Rating Submission</h1>
+
+    <!-- Add Movie Form -->
+    <div class="form-container">
+        <h2>Add New Movie</h2>
+        <form id="movie-form" onsubmit="submitMovie(event)">
+            <div class="form-group">
+                <label for="imdbId">IMDB ID:</label>
+                <input type="text" id="imdbId" name="imdbId" required>
+            </div>
+            <div class="form-group">
+                <label for="movie_name">Movie Name:</label>
+                <input type="text" id="movie_name" name="movie_name" required>
+            </div>
+            <div class="form-group">
+                <label for="release_year">Release Year:</label>
+                <input type="number" id="release_year" name="release_year" required>
+            </div>
+            <div class="form-group">
+                <label for="director_name">Director:</label>
+                <select id="director_name" name="director_name" required>
+                    <option value="" disabled selected>Select Director</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="director_id">Director ID:</label>
+                <input type="number" id="director_id" name="director_id" readonly required>
+            </div>
+            <div class="form-group">
+                <label for="actor_names">Actors (select multiple):</label>
+                <select id="actor_names" name="actor_names" multiple required>
+                    <option value="" disabled>Select Actors</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="actor_ids">Actor IDs (auto-filled):</label>
+                <input type="text" id="actor_ids" name="actor_ids" readonly required>
+            </div>
+            <input type="submit" value="Add Movie">
+        </form>
+    </div>
+
+    <br>
+
+    <!-- Add Rating Form -->
+    <div class="form-container">
+        <h2>Add Movie Rating</h2>
+        <form id="rating-form" onsubmit="submitRating(event)">
+            <div class="form-group">
+                <label for="rating_movie_id">Movie ID:</label>
+                <input type="number" id="rating_movie_id" name="movie_id" required>
+            </div>
+            <div class="form-group">
+                <label for="rating_user_id">User ID:</label>
+                <input type="number" id="rating_user_id" name="user_id" required>
+            </div>
+            <div class="form-group">
+                <label for="rating">Rating (0-5):</label>
+                <input type="number" id="rating" name="rating" min="0" max="5" required>
+            </div>
+            <input type="submit" value="Add Rating">
+        </form>
+    </div>
+
+    <!-- Include Choices.js JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+    <script>
+        // Directors data (array of objects with director_name and director_id)
+        const directors = [
+            { "director_name": "John Lasseter", "director_id": 1 },
+            { "director_name": "Joe Johnston", "director_id": 2 },
+            { "director_name": "Howard Deutch", "director_id": 3 },
+            { "director_name": "Forest Whitaker", "director_id": 4 },
+            { "director_name": "Charles Shyer", "director_id": 5 },
+            { "director_name": "Michael Mann", "director_id": 6 },
+            { "director_name": "Sydney Pollack", "director_id": 7 },
+            { "director_name": "Peter Hewitt", "director_id": 8 },
+            { "director_name": "Peter Hyams", "director_id": 9 },
+            { "director_name": "Martin Campbell", "director_id": 10 },
+            { "director_name": "Rob Reiner", "director_id": 11 },
+            { "director_name": "Mel Brooks", "director_id": 12 },
+            { "director_name": "Simon Wells", "director_id": 13 },
+            { "director_name": "Oliver Stone", "director_id": 14 },
+            { "director_name": "Renny Harlin", "director_id": 15 },
+            { "director_name": "Martin Scorsese", "director_id": 16 },
+            { "director_name": "Ang Lee", "director_id": 17 },
+            { "director_name": "Allison Anders", "director_id": 18 },
+            { "director_name": "Alexandre Rockwell", "director_id": 19 },
+            { "director_name": "Robert Rodriguez", "director_id": 20 },
+            { "director_name": "Quentin Tarantino", "director_id": 21 },
+            { "director_name": "Steve Oedekerk", "director_id": 22 },
+            { "director_name": "Joseph Ruben", "director_id": 23 },
+            { "director_name": "Barry Sonnenfeld", "director_id": 24 },
+            { "director_name": "Jon Amiel", "director_id": 25 },
+            { "director_name": "Richard Donner", "director_id": 26 },
+            { "director_name": "Victor Salva", "director_id": 27 },
+            { "director_name": "Mike Figgis", "director_id": 28 },
+            { "director_name": "Oliver Parker", "director_id": 29 },
+            { "director_name": "Lesli Linka Glatter", "director_id": 30 },
+            { "director_name": "Roger Michell", "director_id": 31 },
+            { "director_name": "Marc Caro", "director_id": 32 },
+            { "director_name": "Jean-Pierre Jeunet", "director_id": 33 },
+            { "director_name": "Yimou Zhang", "director_id": 34 },
+            { "director_name": "John N. Smith", "director_id": 35 },
+            { "director_name": "Terry Gilliam", "director_id": 36 },
+            { "director_name": "Jean-Jacques Annaud", "director_id": 37 },
+            { "director_name": "Chris Noonan", "director_id": 38 },
+            { "director_name": "Christopher Hampton", "director_id": 39 },
+            { "director_name": "Tim Robbins", "director_id": 40 },
+            { "director_name": "Stephen Low", "director_id": 41 },
+            { "director_name": "Andy Tennant", "director_id": 42 },
+            { "director_name": "Amy Heckerling", "director_id": 43 },
+            { "director_name": "Darrell Roodt", "director_id": 44 },
+            { "director_name": "Richard Loncraine", "director_id": 45 },
+            { "director_name": "Albert Hughes", "director_id": 46 },
+            { "director_name": "Allen Hughes", "director_id": 47 },
+            { "director_name": "Michael Hoffman", "director_id": 48 },
+            { "director_name": "Paul W.S. Anderson", "director_id": 49 },
+            { "director_name": "Gus Van Sant", "director_id": 50 },
+            { "director_name": "Jocelyn Moorhouse", "director_id": 51 },
+            { "director_name": "David Fincher", "director_id": 52 },
+            { "director_name": "Mike Gabriel", "director_id": 53 },
+            { "director_name": "Eric Goldberg", "director_id": 54 },
+            { "director_name": "Patricia Rozema", "director_id": 55 },
+            { "director_name": "Bryan Singer", "director_id": 56 },
+            { "director_name": "Richard W. Munchkin", "director_id": 57 },
+            { "director_name": "Woody Allen", "director_id": 58 },
+            { "director_name": "Gianni Amelio", "director_id": 59 },
+            { "director_name": "Holly Goldberg Sloan", "director_id": 60 },
+            { "director_name": "Ulu Grosbard", "director_id": 61 },
+            { "director_name": "Robert Tinnell", "director_id": 62 },
+            { "director_name": "Jodie Foster", "director_id": 63 },
+            { "director_name": "Michael Radford", "director_id": 64 },
+            { "director_name": "Robert Lepage", "director_id": 65 },
+            { "director_name": "Frank Oz", "director_id": 66 },
+            { "director_name": "John Schlesinger", "director_id": 67 },
+            { "director_name": "Stephen Herek", "director_id": 68 },
+            { "director_name": "Paris Barclay", "director_id": 69 },
+            { "director_name": "Bill Bennett", "director_id": 70 },
+            { "director_name": "Jason Bloom", "director_id": 71 },
+            { "director_name": "Farhad Mann", "director_id": 72 },
+            { "director_name": "James Foley", "director_id": 73 },
+            { "director_name": "Josiane Balasko", "director_id": 74 },
+            { "director_name": "F. Gary Gray", "director_id": 75 },
+            { "director_name": "Andrew Sipes", "director_id": 76 },
+            { "director_name": "Noah Baumbach", "director_id": 77 },
+            { "director_name": "Claude Lelouch", "director_id": 78 },
+            { "director_name": "Michael Goldenberg", "director_id": 79 },
+            { "director_name": "Steve Miner", "director_id": 80 },
+            { "director_name": "Christian Duguay", "director_id": 81 },
+            { "director_name": "Susanne Ofteringer", "director_id": 82 },
+            { "director_name": "Sean Penn", "director_id": 83 },
+            { "director_name": "Brian Gibson", "director_id": 84 },
+            { "director_name": "Jafar Panahi", "director_id": 85 },
+            { "director_name": "Gary Fleder", "director_id": 86 },
+            { "director_name": "Marleen Gorris", "director_id": 87 },
+            { "director_name": "Tim Reid", "director_id": 88 },
+            { "director_name": "Henry Jaglom", "director_id": 89 },
+            { "director_name": "Philip Haas", "director_id": 90 },
+            { "director_name": "Ridley Scott", "director_id": 91 },
+            { "director_name": "Ken Kwapis", "director_id": 92 },
+            { "director_name": "Penelope Spheeris", "director_id": 93 },
+            { "director_name": "John Badham", "director_id": 94 },
+            { "director_name": "John Duigan", "director_id": 95 },
+            { "director_name": "Stephen Frears", "director_id": 96 },
+            { "director_name": "Wes Craven", "director_id": 97 },
+            { "director_name": "Ted Demme", "director_id": 98 },
+            { "director_name": "John Woo", "director_id": 99 },
+            { "director_name": "Kenneth Branagh", "director_id": 100 },
+            { "director_name": "Mathieu Kassovitz", "director_id": 101 },
+            { "director_name": "Nick Broomfield", "director_id": 102 }
+
+        ];
+
+        // Actors data (array of objects with actor_name and actor_id)
+        const actors = [
+            { "actor_name": "Tim Allen", "actor_id": 1 },
+            { "actor_name": "Tom Hanks", "actor_id": 2 },
+            { "actor_name": "Don Rickles", "actor_id": 3 },
+            { "actor_name": "Jim Varney", "actor_id": 4 },
+            { "actor_name": "John Ratzenberger", "actor_id": 5 },
+            { "actor_name": "Wallace Shawn", "actor_id": 6 },
+            { "actor_name": "Laurie Metcalf", "actor_id": 7 },
+            { "actor_name": "John Morris", "actor_id": 8 },
+            { "actor_name": "R. Lee Ermey", "actor_id": 9 },
+            { "actor_name": "Annie Potts", "actor_id": 10 },
+            { "actor_name": "Jonathan Hyde", "actor_id": 11 },
+            { "actor_name": "Bradley Pierce", "actor_id": 12 },
+            { "actor_name": "Robin Williams", "actor_id": 13 },
+            { "actor_name": "Kirsten Dunst", "actor_id": 14 },
+            { "actor_name": "Jack Lemmon", "actor_id": 15 },
+            { "actor_name": "Walter Matthau", "actor_id": 16 },
+            { "actor_name": "Ann-Margret", "actor_id": 17 },
+            { "actor_name": "Sophia Loren", "actor_id": 18 },
+            { "actor_name": "Angela Bassett", "actor_id": 19 },
+            { "actor_name": "Loretta Devine", "actor_id": 20 },
+            { "actor_name": "Whitney Houston", "actor_id": 21 },
+            { "actor_name": "Lela Rochon", "actor_id": 22 },
+            { "actor_name": "Steve Martin", "actor_id": 23 },
+            { "actor_name": "Martin Short", "actor_id": 24 },
+            { "actor_name": "Diane Keaton", "actor_id": 25 },
+            { "actor_name": "Kimberly Williams", "actor_id": 26 },
+            { "actor_name": "George Newbern", "actor_id": 27 },
+            { "actor_name": "Kieran Culkin", "actor_id": 28 },
+            { "actor_name": "Robert De Niro", "actor_id": 29 },
+            { "actor_name": "Al Pacino", "actor_id": 30 },
+            { "actor_name": "Val Kilmer", "actor_id": 31 },
+            { "actor_name": "Jon Voight", "actor_id": 32 },
+            { "actor_name": "Tom Sizemore", "actor_id": 33 },
+            { "actor_name": "Ashley Judd", "actor_id": 34 },
+            { "actor_name": "Diane Venora", "actor_id": 35 },
+            { "actor_name": "Natalie Portman", "actor_id": 36 },
+            { "actor_name": "Harrison Ford", "actor_id": 37 },
+            { "actor_name": "Greg Kinnear", "actor_id": 38 },
+            { "actor_name": "Nancy Marchand", "actor_id": 39 },
+            { "actor_name": "Julia Ormond", "actor_id": 40 },
+            { "actor_name": "Jonathan Taylor Thomas", "actor_id": 41 },
+            { "actor_name": "Brad Renfro", "actor_id": 42 },
+            { "actor_name": "Eric Schweig", "actor_id": 43 },
+            { "actor_name": "Charles Rocket", "actor_id": 44 },
+            { "actor_name": "Amy Wright", "actor_id": 45 },
+            { "actor_name": "Michael McShane", "actor_id": 46 },
+            { "actor_name": "Marian Seldes", "actor_id": 47 },
+            { "actor_name": "Rachael Leigh Cook", "actor_id": 48 },
+            { "actor_name": "Peter Mackenzie", "actor_id": 49 },
+            { "actor_name": "Andy Stahl", "actor_id": 50 },
+            { "actor_name": "Adrian Roberts", "actor_id": 51 },
+            { "actor_name": "David Cowgill", "actor_id": 52 },
+            { "actor_name": "Ike Eisenmann", "actor_id": 53 },
+            { "actor_name": "Tamara Mello", "actor_id": 54 },
+            { "actor_name": "Courtney Peldon", "actor_id": 55 },
+            { "actor_name": "Raymond J. Barry", "actor_id": 56 },
+            { "actor_name": "Powers Boothe", "actor_id": 57 },
+            { "actor_name": "Jean-Claude Van Damme", "actor_id": 58 },
+            { "actor_name": "Whittni Wright", "actor_id": 59 },
+            { "actor_name": "Pierce Brosnan", "actor_id": 60 },
+            { "actor_name": "Sean Bean", "actor_id": 61 },
+            { "actor_name": "Famke Janssen", "actor_id": 62 },
+            { "actor_name": "Izabella Scorupco", "actor_id": 63 },
+            { "actor_name": "Joe Don Baker", "actor_id": 64 },
+            { "actor_name": "Judi Dench", "actor_id": 65 },
+            { "actor_name": "Robbie Coltrane", "actor_id": 66 },
+            { "actor_name": "Alan Cumming", "actor_id": 67 },
+            { "actor_name": "Tchéky Karyo", "actor_id": 68 },
+            { "actor_name": "Desmond Llewelyn", "actor_id": 69 },
+            { "actor_name": "Samantha Bond", "actor_id": 70 },
+            { "actor_name": "Michael Douglas", "actor_id": 71 },
+            { "actor_name": "Michael J. Fox", "actor_id": 72 },
+            { "actor_name": "Martin Sheen", "actor_id": 73 },
+            { "actor_name": "Annette Bening", "actor_id": 74 },
+            { "actor_name": "Richard Dreyfuss", "actor_id": 75 },
+            { "actor_name": "Peter MacNicol", "actor_id": 76 },
+            { "actor_name": "Leslie Nielsen", "actor_id": 77 },
+            { "actor_name": "Steven Weber", "actor_id": 78 },
+            { "actor_name": "Amy Yasbeck", "actor_id": 79 },
+            { "actor_name": "Kevin Bacon", "actor_id": 80 },
+            { "actor_name": "Jim Cummings", "actor_id": 81 },
+            { "actor_name": "Bob Hoskins", "actor_id": 82 },
+            { "actor_name": "Bridget Fonda", "actor_id": 83 },
+            { "actor_name": "Anthony Hopkins", "actor_id": 84 },
+            { "actor_name": "Joan Allen", "actor_id": 85 },
+            { "actor_name": "Ed Harris", "actor_id": 86 },
+            { "actor_name": "E.G. Marshall", "actor_id": 87 },
+            { "actor_name": "David Paymer", "actor_id": 88 },
+            { "actor_name": "David Hyde Pierce", "actor_id": 89 },
+            { "actor_name": "Paul Sorvino", "actor_id": 90 },
+            { "actor_name": "Mary Steenburgen", "actor_id": 91 },
+            { "actor_name": "J.T. Walsh", "actor_id": 92 },
+            { "actor_name": "James Woods", "actor_id": 93 },
+            { "actor_name": "Brian Bedford", "actor_id": 94 },
+            { "actor_name": "Kevin Dunn", "actor_id": 95 },
+            { "actor_name": "Fyvush Finkel", "actor_id": 96 },
+            { "actor_name": "Annabeth Gish", "actor_id": 97 },
+            { "actor_name": "Tom Bower", "actor_id": 98 },
+            { "actor_name": "Tony Goldwyn", "actor_id": 99 },
+            { "actor_name": "Larry Hagman", "actor_id": 100 }
+
+              
+            
+        ];
+
+        // Populate the director dropdown
+        const directorSelect = document.getElementById('director_name');
+        directors.forEach(director => {
+            const option = document.createElement('option');
+            option.value = director.director_id;
+            option.text = director.director_name;
+            directorSelect.appendChild(option);
+        });
+
+        // Update director_id field based on director selection
+        directorSelect.addEventListener('change', function() {
+            const selectedDirectorId = this.value;
+            document.getElementById('director_id').value = selectedDirectorId;
+        });
+
+        // Populate the actors multi-select dropdown
+        const actorSelect = document.getElementById('actor_names');
+        actors.forEach(actor => {
+            const option = document.createElement('option');
+            option.value = actor.actor_id;
+            option.text = actor.actor_name;
+            actorSelect.appendChild(option);
+        });
+
+        // Initialize Choices.js for the actor selection
+        const choices = new Choices('#actor_names', {
+            removeItemButton: true,
+            searchResultLimit: 5,
+            placeholderValue: 'Select Actors'
+        });
+
+        // Update actor_ids field based on selected actors using choices.js
+        actorSelect.addEventListener('change', function() {
+            const selectedActors = choices.getValue(); // Use choices.js method
+            const selectedActorIds = selectedActors.map(option => option.value).join(',');
+            document.getElementById('actor_ids').value = selectedActorIds;
+        });
+
+        // Function to submit the movie form and send data to FastAPI
+        async function submitMovie(event) {
+            event.preventDefault();
+            const form = document.getElementById('movie-form');
+            const formData = new FormData(form);
+
+            const movieData = {
+                imdbId: formData.get('imdbId'),
+                movie_name: formData.get('movie_name'),
+                release_year: parseInt(formData.get('release_year')),
+                director_id: parseInt(formData.get('director_id')),
+                actor_ids: document.getElementById('actor_ids').value.split(',').map(id => parseInt(id.trim()))
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/add-movie/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(movieData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.detail}`);
+                } else {
+                    const result = await response.json();
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert('Failed to add movie.');
+                console.error('Error:', error);
+            }
+        }
+
+        // Function to submit the rating form and send data to FastAPI
+        async function submitRating(event) {
+            event.preventDefault();
+            const form = document.getElementById('rating-form');
+            const formData = new FormData(form);
+
+            const ratingData = {
+                movie_id: parseInt(formData.get('movie_id')),
+                user_id: parseInt(formData.get('user_id')),
+                rating: parseFloat(formData.get('rating'))
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/add-rating/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(ratingData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.detail}`);
+                } else {
+                    const result = await response.json();
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert('Failed to add rating.');
+                console.error('Error:', error);
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+
