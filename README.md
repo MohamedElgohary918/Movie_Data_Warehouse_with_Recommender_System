@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # End-to-End Movie Data Processing and Recommender System
 This project covers the complete data life cycle from extraction to the deployment of a recommender system. It includes data extraction, transformation, loading into a database, integration into a data warehouse, and ultimately using the data for recommendations. The entire process is automated and incorporates a machine learning model for generating personalized recommendations, providing a comprehensive solution for movie data analysis and user engagement.
 
@@ -117,3 +118,7 @@ The following technologies were used to build this project:
 - [Shahd Hamdi](https://github.com/shahdhamdi)
 - [Mohamed Elgohary](https://github.com/MohamedElgohary918)
 - [Alyaa Mahmoud](https://github.com/ALYAA-MAHMOOD)
+=======
+# Movie_Data_Warehouse_with_Recommender_System
+About An automated movie data pipeline with daily automated imports into the database and batched loads into the data warehouse. It processes diverse data sources, builds a machine learning-based recommender system, and delivers personalized recommendations using Faiss, Sentence Transformers, and MLflow for tracking.
+>>>>>>> 58d9e63757a4ff1f8c63eaa06d9a4b701511f679
